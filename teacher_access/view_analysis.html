@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Portal</title>
+    <!--chart.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+    <!--bootstrap CSS-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--bootstrap JS-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="shared.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row" id="main-container">
+            <main class="col-lg-10 pt-2 bg-light" id="main">
+                <div class="row p-2">
+
+                    <div class="col-md-12 mb-3">
+                        <div class="card">
+                            <div class="card-body">                   
+                                <span class="display-4"> Sec 2 Math Quiz 2015</span>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="col-md-12 mb-3">
+                        <div class="card">
+                            <h5 class="card-header bg-white">Average Marks per Question</h5>
+                            <div class="card-body">                   
+                                <canvas id="questions" style="width: 100%; height: 300px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <h5 class="card-header bg-white">Grades Percentages</h5>
+                            <div class="card-body pb-md-4">                            
+                                <canvas id="grades" style="width: 100%; height: 300px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <h5 class="card-header bg-white">MSG by Class</h5>
+                            <div class="card-body">                          
+                                <canvas id="msg" style="width: 100%; height: 300px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <button class="btn btn-primary w-100">
+                            <span style="font-size: 20px">Export as Excel File</span>
+                        </button>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="shared.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // edit sidebar
+            $("#nav1").addClass("bg-light");
+        });
+      
+        var ctx = document.getElementById("questions").getContext('2d');
+        var qnChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10"],
+                datasets: [{
+                    label: 'Average Marks',
+                    data: [12, 19, 3, 5, 2, 3, 12, 20, 23, 10],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ]
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+      
+        
+      ctx = document.getElementById("grades").getContext('2d');
+      var gradesChart = new Chart(ctx, {
+         type: "doughnut", 
+         data:{
+           labels:["A1", "A2", "B3", "B4", "C5", "C6"],
+           datasets:[{
+             label: "Grades",
+             data: [1, 4, 13, 12, 4, 1],
+             backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+             ],
+           }]
+         } 
+      });
+
+      ctx = document.getElementById("msg").getContext('2d');
+      var MSGChart = new Chart(ctx, {
+         type: "bar", 
+         data:{
+           labels:["2P1", "2P2", "2P3", "2A1", "2A2", "2A3"],
+           datasets:[{
+             label: "Mean Score Grade",
+             data: [1.5, 1.2, 1.7, 1.3, 2.0, 1.8],
+             backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+             ],
+           }]
+         } 
+      });
+</script>
+</body>
+
+</html>

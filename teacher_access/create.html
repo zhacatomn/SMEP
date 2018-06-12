@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Create Board</title>
+    <!--bootstrap CSS-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--bootstrap JS-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" type="text/css" href="shared.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row" id="main-container">
+            <main class="col-lg-10 pt-2 bg-light" id="main">
+                <div class="row p-2">
+
+                    <div class="col-12 mb-3">
+                        <input type="text" class="w-100 form-control" style="font-size: 7vh" placeholder="Title">
+                    </div>
+
+                    <div class="col-12" id="section-container">
+
+                        <section class="card mb-3">
+                            <div class="card-body">
+                                
+                                <button class="btn btn-outline-danger mb-3 delete">Delete Section</button>
+
+                                <input type="text" class="w-100 form-control" style="font-size: 5vh" placeholder="Section Name">
+
+                                <div class="input-group mt-3 info">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">How many questions?</span>
+                                    </div>
+                                    <input type="number" class="form-control" placeholder="How many questions are there?">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary qn-num">OK!</button>
+                                    </div>
+                                </div>
+
+                                <table class="table table-bordered mt-3">
+                                    <thead class="thead-light">
+                                      <tr>
+                                          <th style="width: 70%">Question Title</th>
+                                          <th style="width: 25%">Maximum Marks</th>
+                                          <th>Half-Marks?</th>
+                                      </tr>  
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </section>
+
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <button class="btn btn-outline-primary" id="add-section">
+                            <span>Add New Section</span>
+                        </button>
+                        <br>
+                        <button class="btn btn-primary mt-3">
+                            <span style="font-size: 20px">Submit!</span>
+                        </button>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="shared.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        // edit sidebar
+        $("#nav2").addClass("bg-light");
+
+        // add questions
+        $("#section-container").on("click", ".qn-num", function(){
+            var num = $(this).closest('.info').find("input[type='number']").val();
+            $(this).closest('section').find('tbody').empty();
+            for(var i = 1; i <= num; i++){
+                var str = '<tr>'
+                              +'<td><input type="text" class="form-control" value="Question '+ i +'"></td>'
+                              +'<td><input type="number" class="form-control" placeholder="Total"></td>'
+                              +'<td><input type="checkbox" class="w-100"></td>'
+                          +'</tr>';
+
+                $(this).closest('section').find('tbody').append(str);
+            }
+            
+        });
+
+        // remove section
+        $("#section-container").on("click", ".delete", function(){
+            if($("#section-container").find("section").length <= 1)
+                return;
+            $($(this).closest('section')).remove();
+        });
+
+        $("#add-section").on('click', function(){
+            // grab the first element's html
+            var str = $("#section-container section:first-child").prop("outerHTML");
+            // add str into section-container
+            $("#section-container").append(str);
+            // clear table
+            $("#section-container section:last-child").find('tbody').empty();
+        });
+    });
+    </script>
+</body>
+
+</html>

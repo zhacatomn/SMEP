@@ -1,0 +1,115 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Student Mark Entry System",
+    "version": "v1"
+  },
+  "basePath": "/api/v1",
+  "paths": {
+    "/auth": {
+      "post": {
+        "operationId": "authUser",
+        "summary": "Authenticates a user",
+        "description": "Obtains a token from userid and password",
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "body",
+            "description": "School Google ID of user",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Plaintext password of user",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": "{\n  \"error\": 0,\n  \"token\": \"<token>\",\n  \"name\": \"<name>\", \n  \"class\": \"<class>\"\n}"
+            }
+          },
+          "403": {
+            "description": "Invalid credentials",
+            "examples": {
+              "application/json": "{\n  \"error\": 1, \n  \"reason\": \"Forbidden.\"\n}"
+            }
+          }
+        }
+      }
+    },
+    "/analysis/list": {
+      "get": {
+        "operationId": "listAnalysis",
+        "summary": "Show all user's created analysis",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": "{\n  \"error\": 0, \n  \"listid\": [\n    {\n      \"id\": 1,\n      \"cnt\": 3,\n      \"name\": \"My analysis\"\n    }\n  ]\n}"
+            }
+          },
+          "403": {
+            "description": "Invalid account type",
+            "examples": {
+              "application/json": "{\n  \"error\": 1, \n  \"reason\": \"Forbidden.\"\n}"
+            }
+          }, 
+          "405": {
+            "description": "Invalid token",
+            "examples": {
+              "application/json": "{\n  \"error\": 1, \n  \"reason\": \"Unauthorized.\"\n}"
+            }
+          }
+        }
+      }
+    }, 
+    "/analysis/details/:id": {
+      "get": {
+        "operationId": "analysisDetails",
+        "summary": "Gets more information of a particular analysis",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Item analysis id",
+            "type": "string",
+            "required": true
+          }
+        ], 
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": "{\n    \"version\": {\n        \"status\": \"CURRENT\",\n        \"updated\": \"2011-01-21T11:33:21Z\",\n        \"media-types\": [\n            {\n                \"base\": \"application/xml\",\n                \"type\": \"application/vnd.openstack.compute+xml;version=2\"\n            },\n            {\n                \"base\": \"application/json\",\n                \"type\": \"application/vnd.openstack.compute+json;version=2\"\n            }\n        ],\n        \"id\": \"v2.0\",\n        \"links\": [\n            {\n                \"href\": \"http://127.0.0.1:8774/v2/\",\n                \"rel\": \"self\"\n            },\n            {\n                \"href\": \"http://docs.openstack.org/api/openstack-compute/2/os-compute-devguide-2.pdf\",\n                \"type\": \"application/pdf\",\n                \"rel\": \"describedby\"\n            },\n            {\n                \"href\": \"http://docs.openstack.org/api/openstack-compute/2/wadl/os-compute-2.wadl\",\n                \"type\": \"application/vnd.sun.wadl+xml\",\n                \"rel\": \"describedby\"\n            },\n            {\n              \"href\": \"http://docs.openstack.org/api/openstack-compute/2/wadl/os-compute-2.wadl\",\n              \"type\": \"application/vnd.sun.wadl+xml\",\n              \"rel\": \"describedby\"\n            }\n        ]\n    }\n}"
+            }
+          },
+          "403": {
+            "description": "Invalid account type",
+            "examples": {
+              "application/json": "{\n  \"error\": 1, \n  \"reason\": \"Forbidden.\"\n}"
+            }
+          }, 
+          "405": {
+            "description": "Invalid token",
+            "examples": {
+              "application/json": "{\n  \"error\": 1, \n  \"reason\": \"Unauthorized.\"\n}"
+            }
+          }
+        }
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ]
+}
