@@ -19,7 +19,7 @@
     <div class="container-fluid">
         <div class="row" id="main-container">
             <main class="pt-2 bg-light main-mini" id="main">
-                <div class="row p-2">
+                <div class="row p-3">
                     <div class="col-lg-4">
                     	<div class="card mb-3">
                             <div class="card-body">
@@ -78,6 +78,37 @@
     <script type="text/javascript">
         $(document).ready(function(){
             $("#nav1").addClass("bg-light");
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json',
+                url: '/api/v1/analysis/list',
+                success: function(data){
+                    console.log(data.error);
+                    if(!data.error){
+                        var ind = 0;
+                        for(var i = 0; i < data.count; i++){
+                            $(".col-lg-4").eq(ind).append(
+                                +'<div class="card mb-3">'
+                                   +'<div class="card-body">'
+                                        +'<h5 class="card-title">'+ data.list[i].name +'</h5>'
+                                        +'<p class="card-text">'+ data.list[i].info +'</p>'
+                                        +'<a href="#" class="btn btn-primary">Do Analysis</a>'
+                                    +'</div>'
+                                +'</div>'
+                            );
+
+                            ind++;
+                            if(ind == 3) ind = 0;
+                        }
+
+                    }
+                    else{
+                        alert("Tsk tsk tsk");
+                    }
+                }
+            });
         });
     </script>
 
