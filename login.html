@@ -1,70 +1,99 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Login</title>
-	<!--bootstrap CSS-->
+    <title>Login</title>
+    <!--bootstrap CSS-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!--bootstrap JS-->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-		
-		<style>
-			@font-face{
-				font-family: "Roboto Thin";
-				src: url("fonts/Roboto-Thin.ttf");
-			}
-			.row{
-				height: 100vh;
-			}
-		</style>
-	
+    <style>
+    @font-face {
+        font-family: "Roboto Thin";
+        src: url("fonts/Roboto-Thin.ttf");
+    }
+
+	#desc{
+		background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Hwa_Chong_Institution_Clock_Tower_Front_View.JPG/1200px-Hwa_Chong_Institution_Clock_Tower_Front_View.JPG');
+		background-size: cover;
+		position: relative;
+		box-shadow: inset 0 0 0 1000px rgba(0,0,0,.5);
+	}
+
+	#desc:after{
+		background: rgba(0,0,0,0.75);
+	}
+
+	.row{
+		min-height: 100vh; 
+	}
+
+
+    </style>
 </head>
+
 <body>
-	<div class="container-fluid">
-		<div class="row d-flex justify-content-center align-items-center flex-column bg-light">
-			<h1 style="font-family: 'Roboto Thin'" class="display-4">
-					SMEP
-			</h1>
-			<div class="col-4 mt-3">
-				
-				<div class="form-group">
-					<input type="text" class="form-control" id="schoolid" placeholder="Login ID">
-				</div>
-				<div class="form-group">
-					<input type="password" class="form-control" id="password" placeholder="Password">
-				</div>
-				<button type="submit" class="btn btn-outline-dark w-100" id="submitbtn" onclick="login();">Submit</button>
-				
-			</div>
-		</div>
-	</div>
-	
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script>
-		function login(){
-			
-			var username = $("#schoolid").val();
-			var password = $("#password").val();
-			
-			$.ajax({
-				type: 'POST',
-				dataType: 'json',
-				contentType: 'application/json',
-				url: '/api/v1/auth',
-				data:JSON.stringify({userid: username, password: password}),
-				success: function(data){
-					console.log(data.error);
-					if(!data.error){
-						window.location = "dashboard.html";
-					}
-					else{
-						alert("Tsk tsk tsk");
-					}
-				}
-			});
-			
-		}
-	</script>
+    <div class="container-fluid">
+        <div class="row">
+        	<div class="col-4 d-flex justify-content-center align-items-center flex-column bg-light">
+                <h1 style="font-family: 'Roboto Thin'" class="display-4">
+							SMEP
+					</h1>
+                <div class="w-100 mt-3 p-3">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="schoolid" placeholder="Login ID">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="password" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-outline-dark w-100" id="submitbtn" onclick="login();">Submit</button>
+                </div>
+            </div>
+            <div class="col-8 p-5 d-flex align-items-center bg-info text-light" id="desc">
+                <span>
+					<h2>What is the SMEP?</h2>
+					<p>
+						The Student Mark Entry Portal (SMEP) is a simple portal for teachers to assess the marks of the students after
+						any sort of test or examiniation. It also provides data analysis functionality automatically so that teachers may easily assess the grades of any particular class or student.
+					</p>
+					<h2>Who made it?</h2>
+					<p>
+						One guy from 4S2, another from 4A1, and one last guy from 4
+					</p>
+					<h2>Encountered any problems?</h2>
+					<p>
+						If you have encountered any bugs in the site, feel free to contact and inform us!
+					</p>
+				</span>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+    function login() {
+
+        var username = $("#schoolid").val();
+        var password = $("#password").val();
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: '/api/v1/auth',
+            success: function(data) {
+                console.log(data.error);
+                if (!data.error) {
+                    window.location = "dashboard.html";
+                } else {
+                    alert("Tsk tsk tsk");
+                }
+            }
+        });
+
+    }
+    </script>
 </body>
+
 </html>

@@ -12,7 +12,12 @@
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="shared.css">
+    <link rel="stylesheet" type="text/css" href="../shared.css">
+    <style type="text/css">
+        .drop-btn{
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,16 +25,19 @@
         <div class="row" id="main-container">
             <main class="bg-light main-mini w-100" id="main">
                 <div class="col-12 pt-5 pb-5 bg-info text-center">
-                    <h1 class="display-1 text-white">Sec 2 Math Quiz 2015</h1>
+                    <h1 class="display-1 text-white" id="title">Sec 2 Math Quiz 2015</h1>
                 </div>
                 <div class="bg-light col-12 pt-4 pb-4 d-flex flex-column align-items-center">
                     <!--Section-->
                     <section class="bg-white col-md-5 pb-3 pt-3 border rounded mb-3">
+
                         <div class="col-12 d-table mb-3">
-                            <h3 class="d-table-cell">Paper 1</h3>
+                            <h3 class="d-table-cell">Questions</h3>
                             <span class="d-table-cell text-right align-middle drop-btn">&#9660;</span>
                         </div>
+
                         <div class="questions">
+
                             <div class="col-12 d-table mb-3">
                                 <span class="d-table-cell w-75">Question 1</span>
                                 <div class="d-table-cell form-group w-25">
@@ -42,53 +50,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-12 d-table mb-3">
-                                <span class="d-table-cell w-75">Question 2</span>
-                                <div class="d-table-cell form-group w-25">
-                                    <select class="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12 d-table mb-3">
-                                <span class="d-table-cell w-75">Question 3</span>
-                                <div class="d-table-cell form-group w-25">
-                                    <select class="form-control">
-                                        <option>1.5</option>
-                                        <option>2.5</option>
-                                        <option>3.5</option>
-                                        <option>4.5</option>
-                                        <option>5.5</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                    </section>
 
-
-                    <section class="bg-white col-md-5 pb-3 pt-3 border rounded mb-3">
-
-                        <div class="col-12 d-table mb-3">
-                            <h3 class="d-table-cell">Paper 2</h3>
-                            <span class="d-table-cell text-right align-middle drop-btn">&#9660;</span>
-                        </div>
-                        <div class="questions">
-                            <div class="col-12 d-table mb-3">
-                                <span class="d-table-cell w-75">Question 1</span>
-                                <div class="d-table-cell form-group w-25">
-                                    <select class="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
 
                     </section>
@@ -122,10 +84,41 @@
         $(".drop-btn").on("click", function(){
             $(".questions").eq($(".drop-btn").index(this)).animate({
                 height: "toggle"
-            },  300, function() {
-                /* stuff to do after animation is complete */
+            },  300
+        });
+
+        $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json',
+                url: '/api/v1/analysis/list',
+                success: function(data){
+                    console.log(data.error);
+                    if(!data.error){
+                        /*
+                        var obj = data.analysis;
+                        $("#title").append(obj.name);
+                        for(var i = 0; i < obj.qncnt; i++){
+
+                        }
+                        $(".questions").eq(0).append(
+                           '<div class="col-12 d-table mb-3">'
+                               '<span class="d-table-cell w-75">Question'+ (i + 1) +'</span>'
+                                '<div class="d-table-cell form-group w-25">'
+                                    '<select class="form-control">'
+
+                                    '</select>'
+                               '</div>'
+                            '</div>'
+                        );
+                        */
+
+                    }
+                    else{
+                        alert(data.reason);
+                    }
+                }
             });
-        })
     </script>
 </body>
 
