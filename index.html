@@ -27,7 +27,7 @@
 	}
 
 	.row{
-		min-height: 100vh; 
+		min-height: 100vh;
 	}
 
 
@@ -60,7 +60,7 @@
 					</p>
 					<h2>Who made it?</h2>
 					<p>
-						One guy from 4S2, another from 4A1, and one last guy from 4
+						One guy from 4S2, another from 4A1, and one last guy from 4P3.
 					</p>
 					<h2>Encountered any problems?</h2>
 					<p>
@@ -72,6 +72,17 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script>
+    $(document).ready(function(){
+      if (window.localStorage.getItem('token') != null) {
+        if (window.localStorage.getItem('accType') < 1) {
+          window.location = 'teacher_access/dashboard.html';
+        }
+        else {
+          window.location = 'student_access/dashboard.html';
+        }
+      }
+    });
+
     function login() {
 
         var username = $("#schoolid").val();
@@ -82,10 +93,13 @@
             dataType: 'json',
             contentType: 'application/json',
             url: '/api/v1/auth',
+            data: JSON.stringify({userid: username, password: password}),
             success: function(data) {
+                window.localStorage.setItem('token', data.token);
+                window.localStorage.setItem('accType', data.type);
                 console.log(data.error);
                 if (!data.error) {
-                    window.location = "dashboard.html";
+                    window.location = "teacher_access/dashboard.html";
                 } else {
                     alert("Tsk tsk tsk");
                 }

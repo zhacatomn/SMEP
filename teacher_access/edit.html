@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Create Board</title>
+    <!--bootstrap CSS-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--bootstrap JS-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" type="text/css" href="../shared.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row" id="main-container">
+            <main class="pt-2 bg-light main-mini" id="main">
+                <div class="row p-2">
+
+                    <div class="col-12 mb-3">
+                        <input type="text" class="w-100 form-control" style="font-size: 7vh" placeholder="Title" id="title">
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <textarea class="w-100 form-control" placeholder="Description" id="desc"></textarea>
+                    </div>
+
+                    <div class="col-12" id="section-container">
+
+                        <section class="card mb-3">
+                            <div class="card-body">
+
+                                <button class="btn btn-outline-danger mb-3 delete">Delete Section</button>
+
+                                <input type="text" class="w-100 form-control" id="sect-name" style="font-size: 5vh" placeholder="Section Name">
+
+                                <div class="input-group mt-3 info w-50">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">How many questions?</span>
+                                    </div>
+                                    <input type="number" class="form-control" placeholder="Enter a number">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary qn-num">OK!</button>
+                                    </div>
+                                </div>
+
+                                <table class="table table-bordered mt-3">
+                                    <thead class="thead-light">
+                                      <tr>
+                                          <th style="width: 70%">Question Title</th>
+                                          <th style="width: 25%">Maximum Marks</th>
+                                          <th>Half-Marks?</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </section>
+
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <button class="btn btn-outline-primary" id="add-section">
+                            <span>Add New Section</span>
+                        </button>
+                        <br>
+                        <button class="btn btn-primary mt-3" onclick = "submit();">
+                            <span style="font-size: 20px">Submit!</span>
+                        </button>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="shared.js"></script>
+    <script type="text/javascript">
+    var id;
+
+    $(document).ready(function() {
+
+        // add questions
+        $("#section-container").on("click", ".qn-num", function(){
+            var num = $(this).closest('.info').find("input[type='number']").val();
+            $(this).closest('section').find('tbody').empty();
+            for(var i = 1; i <= num; i++){
+                var str = '<tr class="question">'
+                              +'<td><input type="text" class="form-control" value="Question '+ i +'"></td>'
+                              +'<td><input type="number" class="form-control" placeholder="Total"></td>'
+                              +'<td><input type="checkbox" class="w-100"></td>'
+                          +'</tr>';
+
+                $(this).closest('section').find('tbody').append(str);
+            }
+
+        });
+
+        // remove section
+        $("#section-container").on("click", ".delete", function(){
+            if($("#section-container").find("section").length <= 1)
+                return;
+            $($(this).closest('section')).remove();
+        });
+        // add section
+        $("#add-section").on('click', function(){
+            // grab the first element's html
+            var str = $("#section-container section:first-child").prop("outerHTML");
+            // add str into section-container
+            $("#section-container").append(str);
+            // clear table
+            $("#section-container section:last-child").find('tbody').empty();
+        });
+
+        // get the data
+        id = localStorage.getItem('id');
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: '/api/v1/analysis/' + id,
+            headers: {
+              "Authorization": window.localStorage.getItem('token')
+            },
+            success: function(data){
+                if(!data.error){
+                    var obj = data.analysis;
+                    $("#title").val(obj.name);
+                    $("#desc").val(obj.info);
+                    var cur_sec, qn_num;
+                    for(var i = 0; i < obj.questions.length; i++){
+
+                        if(cur_sec != obj.questions[i].section || i == 0){
+                            if(i != 0) $("#add-section").trigger('click');
+                            cur_sec = obj.questions[i].section;
+                            $('section').eq($('section').length - 1).find('#sect-name').val(cur_sec);
+                            qn_num = 1;
+                        }
+
+                        var totalSec = $('section').length;
+                        var str = '<tr class="question">'
+                          +'<td><input type="text" class="form-control" value="Question '+ qn_num +'"></td>'
+                          +'<td><input type="number" class="form-control" placeholder="Total" value='+obj.questions[i].marks+'></td>'
+                          +'<td><input type="checkbox" class="w-100"></td>'
+                        +'</tr>';
+                        $('section').eq(totalSec - 1).find('tbody').append(str);
+                        qn_num++;
+                        
+                    }
+                }   
+                else{
+                    alert(data.reason);
+                }
+            }
+        });
+    });
+
+    function submit(){
+        var name = $("#title").val();
+        var info = $("#desc").val();
+        var qncnt = $(".question").length;
+        var qn = [];
+
+        var sectcnt = $("section").length;
+        for(var i = 0; i < sectcnt; i++){
+            $sec = $("section").eq(i);
+            var size = $sec.find(".question").length;
+            for(var k = 0; k < size; k++){
+                var totalMarks = $sec.find(".question").eq(k).find("input[type='number']").val();
+                var obj = {number: k, totalMarks: totalMarks, marks: totalMarks, required: true, section: $sec.find("#sect-name").val()};
+                qn.push(obj);
+            }
+        }
+
+        console.log(name, info, qncnt, qn);
+
+      
+       $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: '/api/v1/analysis/' + id,
+            data: JSON.stringify({name: name, info: info, qncnt: qncnt, id:id, questions: qn}),
+            headers: {
+              "Authorization": window.localStorage.getItem('token')
+            },
+            success: function(data){
+                if(!data.error){
+                    window.location = "dashboard.html";
+                }
+                else{
+                    //window.location = "create.html";
+                    alert(data.reason);
+                }
+            }
+        });
+
+
+    }
+    </script>
+</body>
+
+</html>

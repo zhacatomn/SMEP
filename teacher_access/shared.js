@@ -22,7 +22,7 @@ $(document).ready(function(){
                 + '<a href="create.html" class="nav-link text-dark">Create Board</a>'
             + '</li>'
             + '<li class="nav-item" id="nav3">'
-                + '<a href="#" class="nav-link text-dark">Logout</a>'
+                + '<a href="#" class="nav-link text-dark" onclick="logout()">Logout</a>'
             + '</li>'
         + '</ul>'
     +'</nav>'
@@ -30,27 +30,27 @@ $(document).ready(function(){
 
     var toggleSidebar = false;
     var mini = false;
-    
+
     // if window initial size is smaller than lg
     if($("#nav-btn").css("display") != "none"){
         mini = true;
         $("#sidebar").removeClass('open');
-        $("#main").removeClass('main-mini');    
+        $("#main").removeClass('main-mini');
     }
-    
+
 
     $(window).resize(function(){
         if($("#nav-btn").css("display") == "none"){
             mini = false;
             $("#sidebar").addClass('open');
-            $("#main").addClass('main-mini'); 
-        } 
+            $("#main").addClass('main-mini');
+        }
         else{
             if(!mini){
                 mini = true;
                 toggleSidebar = false;
                 $("#sidebar").removeClass('open');
-                $("#main").removeClass('main-mini');    
+                $("#main").removeClass('main-mini');
             }
         }
     });
@@ -67,3 +67,8 @@ $(document).ready(function(){
     });
 
 });
+
+function logout () {
+  window.localStorage.clear();
+  window.location = '/';
+}

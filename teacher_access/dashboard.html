@@ -21,53 +21,14 @@
             <main class="pt-2 bg-light main-mini w-100" id="main">
                 <div class="row p-3">
                     <div class="col-lg-4">
-                    	<div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Sec 2 Math Quiz 2015</h5>
-                                <p class="card-text">Please Fill in Accordingly</p>
-                                <a href="teacher_analysis.html" class="btn btn-primary">Go To Analysis</a>
-                            </div>
-                        </div>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Sec 2 Science Quiz 2015</h5>
-                                <p class="card-text">This a quiz analysis on your marks for this test. Please answer accurately and by 1.00pm. If not, it will be quite the hassle.</p>
-                                <a href="#" class="btn btn-primary">Go To Analysis</a>
-                            </div>
-                        </div>
-                        
+                
+
                     </div>
                     <div class="col-lg-4">
-                    	<div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Sec 3 Math Quiz 2015</h5>
-                                <p class="card-text">Do it by 1.00pm</p>
-                                <a href="#" class="btn btn-primary">Go To Analysis</a>
-                            </div>
-                        </div>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Sec 3 Chemistry Quiz 2018</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go To Analysis</a>
-                            </div>
-                        </div>
+                    
                     </div>
                     <div class="col-lg-4">
-                    	<div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Sec 4 Math Quiz 2015</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go To Analysis</a>
-                            </div>
-                        </div>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Sec 4 Chem Quiz 2018</h5>
-                                <p class="card-text">Do by 12.00pm</p>
-                                <a href="#" class="btn btn-primary">Go To Analysis</a>
-                            </div>
-                        </div>
+        
                     </div>
                 </div>
             </main>
@@ -76,6 +37,10 @@
 
     <script src="shared.js"></script>
     <script type="text/javascript">
+        function goToPage(id){
+            localStorage.setItem('id', id);
+        }
+
         $(document).ready(function(){
             // update sidebar
             $("#nav1").addClass("bg-light");
@@ -85,17 +50,21 @@
                 dataType: 'json',
                 contentType: 'application/json',
                 url: '/api/v1/analysis/list',
+                headers: {
+                  "Authorization": window.localStorage.getItem('token')
+                },
                 success: function(data){
-                    console.log(data.error);
+                    console.log(data);
                     if(!data.error){
                         var ind = 0;
-                        for(var i = 0; i < data.count; i++){
+                        for(var i = 0; i < data.list.length; i++){
                             $(".col-lg-4").eq(ind).append(
-                                +'<div class="card mb-3">'
+                                '<div class="card mb-3">'
                                    +'<div class="card-body">'
                                         +'<h5 class="card-title">'+ data.list[i].name +'</h5>'
                                         +'<p class="card-text">'+ data.list[i].info +'</p>'
-                                        +'<a href="student_analysis/'+ data.list[i].id +'" class="btn btn-primary">Go To Analysis</a>'
+                                        +'<a href="teacher_analysis.html" onclick="goToPage('+data.list[i].id+');" class="btn btn-primary">Go To Analysis</a>'
+                                        +'<a href="edit.html" onclick="goToPage('+data.list[i].id+');" class="btn btn-danger m-1">Edit</a>'
                                     +'</div>'
                                 +'</div>'
                             );

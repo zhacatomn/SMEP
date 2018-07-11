@@ -1,0 +1,46 @@
+
+.navbar {
+    height: 48px;
+}
+
+/* Sidebar stuff */
+.sidebar {
+    position: fixed;
+    width: 250px;
+    z-index: 3;
+    top: 48px;
+    bottom: 0;
+    left: -250px;
+    /* Behind the navbar */
+    padding: 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+
+    transition: 0.3s transform ease-in-out;
+}
+
+.sidebar-fixed{
+    position: fixed;
+    z-index: 2;
+}
+
+.sidebar li:hover:not(:first-child){
+    background-color: lightgrey; 
+}
+
+/*main stuff*/
+main{
+    min-height: calc(100vh - 48px)!important;
+    overflow-x: hidden; 
+}
+
+.main-mini{
+    margin-left: 250px;
+}
+
+.open{
+    transform: translateX(250px);
+}
+
+
+
+

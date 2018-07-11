@@ -32,10 +32,10 @@
 
                         <section class="card mb-3">
                             <div class="card-body">
-                                
+
                                 <button class="btn btn-outline-danger mb-3 delete">Delete Section</button>
 
-                                <input type="text" class="w-100 form-control" style="font-size: 5vh" placeholder="Section Name">
+                                <input type="text" class="w-100 form-control" style="font-size: 5vh" id="sect-name" placeholder="Section Name">
 
                                 <div class="input-group mt-3 info w-50">
                                     <div class="input-group-prepend">
@@ -53,7 +53,7 @@
                                           <th style="width: 70%">Question Title</th>
                                           <th style="width: 25%">Maximum Marks</th>
                                           <th>Half-Marks?</th>
-                                      </tr>  
+                                      </tr>
                                     </thead>
                                     <tbody>
                                     </tbody>
@@ -97,7 +97,7 @@
 
                 $(this).closest('section').find('tbody').append(str);
             }
-            
+
         });
 
         // remove section
@@ -122,20 +122,39 @@
         var info = $("#desc").val();
         var qncnt = $(".question").length;
         var qn = [];
+
+        var counter = 0;
+        var sectcnt = $("section").length;
+        for(var i = 0; i < sectcnt; i++){
+            $sec = $("section").eq(i);
+            var size = $sec.find(".question").length;
+            for(var k = 0; k < size; k++){
+                var totalMarks = $sec.find(".question").eq(k).find("input[type='number']").val();
+                var obj = {number: k, totalMarks: totalMarks, marks: totalMarks, required: true, section: $sec.find("#sect-name").val()};
+                qn.push(obj);
+            }
+        }
+
+        /*
         for(var i = 0; i < qncnt; i++){
             var totalMarks = $(".question").eq(i).find("input[type='number']").val();
             var obj = {number: i, totalMarks: totalMarks, marks: totalMarks, required: true};
             qn.push(obj);
         }
+        */
 
         console.log(name, info, qncnt, qn);
+
         
        $.ajax({
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
             url: '/api/v1/analysis/create',
-            data: JSON.stringify({analysis:{name: name, info: info, qncnt: qncnt, questions: qn}}),
+            data: JSON.stringify({name: name, info: info, qncnt: qncnt, questions: qn}),
+            headers: {
+              "Authorization": window.localStorage.getItem('token')
+            },
             success: function(data){
                 if(!data.error){
                     window.location = "dashboard.html";
@@ -146,7 +165,8 @@
             }
         });
         
-        
+
+
     }
     </script>
 </body>
